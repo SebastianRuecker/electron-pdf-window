@@ -7,7 +7,8 @@ const extend = require('deep-extend')
 const got = require('got')
 
 const BrowserWindow = isRenderer
-  ? electron.remote.BrowserWindow : electron.BrowserWindow
+  ? electron.remote.BrowserWindow
+  : electron.BrowserWindow
 
 const PDF_JS_PATH = path.join(__dirname, 'pdfjs', 'web', 'viewer.html')
 
@@ -40,14 +41,17 @@ function isPDF (url) {
     } else if (hasPdfExtension(url)) {
       resolve(true)
     } else {
-      got.head(url).then(res => {
-        if (res.headers.location) {
-          isPDF(res.headers.location).then(isit => resolve(isit))
-          .catch(err => reject(err))
-        } else {
-          resolve(res.headers['content-type'].indexOf('application/pdf') !== -1)
-        }
-      }).catch(err => reject(err))
+      got.head(url)
+        .then(res => {
+          if (res.headers.location) {
+            isPDF(res.headers.location)
+              .then(isit => resolve(isit))
+              .catch(err => reject(err))
+          } else {
+            resolve(res.headers['content-type'].indexOf('application/pdf') !== -1)
+          }
+        })
+        .catch(err => reject(err))
     }
   })
 }
@@ -65,22 +69,22 @@ class PDFWindow extends BrowserWindow {
 
     this.webContents.on('new-window', (event, url) => {
       event.preventDefault()
-
       event.newGuest = new PDFWindow()
       event.newGuest.loadURL(url)
     })
   }
 
   loadURL (url, options) {
-    isPDF(url).then(isit => {
-      if (isit) {
-        super.loadURL(`file://${
-          path.join(__dirname, 'pdfjs', 'web', 'viewer.html')}?file=${
-            decodeURIComponent(url)}`, options)
-      } else {
-        super.loadURL(url, options)
-      }
-    }).catch(() => super.loadURL(url, options))
+    isPDF(url)
+      .then(isit => {
+        if (isit) {
+          super.loadURL(`file://${
+            path.join(__dirname, 'pdfjs', 'web', 'viewer.html')}?file=${decodeURIComponent(url)}`, options)
+        } else {
+          super.loadURL(url, options)
+        }
+      })
+      .catch(() => super.loadURL(url, options))
   }
 }
 
@@ -101,8 +105,7 @@ PDFWindow.addSupport = function (browserWindow) {
   browserWindow.loadURL = function (url, options) {
     isPDF(url).then(isit => {
       if (isit) {
-        load.call(browserWindow, `file://${PDF_JS_PATH}?file=${
-          decodeURIComponent(url)}`, options)
+        load.call(browserWindow, `file://${PDF_JS_PATH}?file=${decodeURIComponent(url)}`, options)
       } else {
         load.call(browserWindow, url, options)
       }
