@@ -28465,10 +28465,10 @@ function () {
 
             case 'Ch':
               return new ChoiceWidgetAnnotation(parameters);
-          }
 
-          (0, _util.warn)('Unimplemented widget field type "' + fieldType + '", ' + 'falling back to base field type.');
-          return new WidgetAnnotation(parameters);
+              default:
+                  return new WidgetAnnotation(parameters);
+          }
 
         case 'Popup':
           return new PopupAnnotation(parameters);
@@ -28995,7 +28995,7 @@ function (_Annotation2) {
     if (data.fieldType === 'Sig') {
       data.fieldValue = null;
 
-      _this3.setFlags(_util.AnnotationFlag.HIDDEN);
+      // _this3.setFlags(_util.AnnotationFlag.HIDDEN);
     }
 
     return _this3;
