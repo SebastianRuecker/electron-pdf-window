@@ -14445,15 +14445,13 @@ initCom(PDFViewerApplication);
   PDFPrintServiceFactory.initGlobals(PDFViewerApplication);
 }
 {
-  const HOSTED_VIEWER_ORIGINS = ["null", "http://mozilla.github.io", "https://mozilla.github.io"];
+  const HOSTED_VIEWER_ORIGINS = ["null", "file://", "http://mozilla.github.io", "https://mozilla.github.io"];
   var validateFileURL = function (file) {
     if (!file) {
       return;
     }
     try {
       const viewerOrigin = new URL(window.location.href).origin || "null";
-
-      console.log(viewerOrigin);
 
       if (HOSTED_VIEWER_ORIGINS.includes(viewerOrigin)) {
         return;
