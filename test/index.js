@@ -26,5 +26,5 @@ app.on('ready', () => {
   win.loadURL('https://arxiv.org/pdf/1606.05328.pdf?asdasd=a234')
 
   // win2.loadURL('http://www.arxiv-sanity.com/')
-  win2.loadURL('https://arxiv.org/abs/1601.06759')
+  win2.loadURL('file://${__dirname}/helloworld.pdf')
 })
