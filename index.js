@@ -4,7 +4,7 @@ const path = require('path')
 const readChunk = require('read-chunk')
 const fileType = require('file-type')
 const extend = require('deep-extend')
-const got = require('got')
+const got = require('got').got
 
 const BrowserWindow = isRenderer
   ? electron.remote.BrowserWindow
