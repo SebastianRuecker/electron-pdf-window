@@ -14452,6 +14452,9 @@ initCom(PDFViewerApplication);
     }
     try {
       const viewerOrigin = new URL(window.location.href).origin || "null";
+
+      console.log(viewerOrigin);
+
       if (HOSTED_VIEWER_ORIGINS.includes(viewerOrigin)) {
         return;
       }
